@@ -1,5 +1,4 @@
 # ODromedr
-## Intro
 
 ODromdr è un linguaggio interpretato il cui obiettivo è quello di fare semplici operazioni su vettori
 
