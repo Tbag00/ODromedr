@@ -61,3 +61,80 @@ let valuta (Blocco b) = (* valuta un blocco *)
     | Ass(v, e) :: coda -> aux (assegna env v e) coda
     | e :: coda -> eval env e :: aux env coda
   in aux [] b
+
+
+  (* PARTE DELLA STAMPA *)
+
+  let stampaValore = function
+  | VInt n -> print_int n; print_newline ()
+  | VVett l ->
+      print_string "[";
+      List.iteri (fun i x ->
+        if i > 0 then print_string ", ";
+        print_int x) l;
+      print_string "]";
+      print_newline ()
+
+let stampaLista l = List.iter stampaValore l
+
+(* Stampa una espressione in notazione prefissa *)
+let rec stampaespressione = function
+  | Int n -> print_string "Int("; print_int n; print_string ")"
+  | Var x -> print_string "Var("; print_string x; print_string ")"
+  | Ass (s,e) -> print_string s; print_string " := "; stampaespressione e
+  | Sum (e1,e2) ->
+      print_string "SUM("; stampaespressione e1;
+      print_string ", "; stampaespressione e2;
+      print_string ")"
+  | Diff (e1,e2) ->
+      print_string "DIFF("; stampaespressione e1;
+      print_string ", "; stampaespressione e2;
+      print_string ")"
+  | Mult (e1,e2) ->
+      print_string "MULT("; stampaespressione e1;
+      print_string ", "; stampaespressione e2;
+      print_string ")"
+  | Vettore lst ->
+      print_string "[";
+      List.iteri (fun i e ->
+        if i > 0 then print_string ", ";
+        stampaespressione e) lst;
+      print_string "]"
+
+(* Stampa un blocco di espressioni in notazione prefissa *)
+let stampablocco (Blocco b) =
+  List.iter (fun x -> stampaespressione x; print_newline ()) b
+
+(* Stampa una espressione in notazione infissa *)
+let rec stampaespressioneinfissa = function
+  | Int n -> print_int n
+  | Var x -> print_string x
+  | Ass (s,e) -> print_string s; print_string " := "; stampaespressioneinfissa e
+  | Sum (e1,e2) ->
+      print_string "(";
+      stampaespressioneinfissa e1;
+      print_string " + ";
+      stampaespressioneinfissa e2;
+      print_string ")"
+  | Diff (e1,e2) ->
+      print_string "(";
+      stampaespressioneinfissa e1;
+      print_string " - ";
+      stampaespressioneinfissa e2;
+      print_string ")"
+  | Mult (e1,e2) ->
+      print_string "(";
+      stampaespressioneinfissa e1;
+      print_string " * ";
+      stampaespressioneinfissa e2;
+      print_string ")"
+  | Vettore lst ->
+      print_string "[";
+      List.iteri (fun i e ->
+        if i > 0 then print_string ", ";
+        stampaespressioneinfissa e) lst;
+      print_string "]"
+
+(* Stampa un blocco di espressioni in notazione infissa *)
+let stampabloccoinfissa (Blocco b) =
+  List.iter (fun x -> stampaespressioneinfissa x; print_newline ()) b
