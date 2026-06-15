@@ -53,7 +53,17 @@ let valuta (Blocco b) = (* valuta un blocco *)
         | VInt n, VInt m -> VInt (n * m)
         | VInt n, VVett x -> VVett (List.map (fun element -> element * n) x)
         | VVett x, VInt n -> VVett (List.map (fun element -> element * n) x)
-        | VVett _, VVett _ -> failwith "errore di tipo: Vec * Vec non permesso"
+        | VVett x, VVett y -> 
+            if List.length x <> List.length y then
+                failwith "vettori di lunghezza diversa"
+              else
+                let prodotti = List.map2 ( * ) x y in
+                VInt (List.fold_left (+) 0 prodotti)        | VVett x, VVett y -> 
+            if List.length x <> List.length y then
+                failwith "vettori di lunghezza diversa"
+              else
+                let prodotti = List.map2 ( * ) x y in
+                VInt (List.fold_left (+) 0 prodotti)
         | _ -> failwith "errore in Mult"
       )
     | Ass(_,_) -> failwith "Ass non valutabile direttamente con eval"
