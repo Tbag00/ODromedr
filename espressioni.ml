@@ -8,6 +8,7 @@ type espressione =
   | Int of int
   | Var of string
   | Ass of string * espressione
+  | Neg of espressione
   | Sum of espressione * espressione
   | Diff of espressione * espressione
   | Mult of espressione * espressione
