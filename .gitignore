@@ -1,5 +1,6 @@
 *.cm*
 *.ml
 !espressioni.ml
+!main.ml
 *.mli
 odromedr
