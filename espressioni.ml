@@ -27,6 +27,9 @@ let valuta (Blocco b) = (* valuta un blocco *)
             | VVett _ -> failwith "elementi del vettore devono essere interi"
           ) lst)
     | Var v -> List.assoc v env
+    | Neg e -> (match eval env e with
+        | VInt n -> VInt (-n)
+        | VVett x -> VVett (List.map (fun n -> -n) x))
     | Sum(e1,e2) -> (match eval env e1, eval env e2 with
         | VInt n, VInt m -> VInt (n + m)
         | VVett x, VVett y ->

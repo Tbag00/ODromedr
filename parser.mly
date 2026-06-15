@@ -2,7 +2,7 @@
 %token <string> VAR
 %token PLUS MINUS TIMES
 %token LPAREN RPAREN
-%token LBRACKET RBRACKET
+%token INIZIOVEC FINEVEC
 %token COMMA
 %token ASSEGNA
 %token SEMICOLON
@@ -47,8 +47,10 @@ expr:
       { Espressioni.Ass($1, $3) }
   | LPAREN expr RPAREN
       { $2 }
-  | LBRACKET listaexpr RBRACKET
+  | INIZIOVEC listaexpr FINEVEC
       { Espressioni.Vettore $2 }
+  | MINUS expr %prec UMINUS
+    { Espressioni.Neg $2 }
   | expr PLUS expr
       { Espressioni.Sum($1, $3) }
   | expr MINUS expr
