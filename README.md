@@ -3,6 +3,8 @@
 ODromdr è un linguaggio interpretato il cui obiettivo è quello di fare semplici operazioni su vettori
 
 L'interprete è scritto in OCaml
+##   TODO
+cambia la struttura della grammatica
 ## Grammatica
 A = { '{', '}', '[', ']', ',', ';', ':=', '+', '-', '*', '(', ')', VAR, INT }
 V = { Blocco, ListaStmt, Stmt, Expr, Vettore, ListaInt }
@@ -48,7 +50,22 @@ ocamlc -c parser.ml
 
 ocamlc -c main.ml
 
-ocamlc -o programma espressioni.cmo Lexer.cmo parser.cmo main.cmo
+ocamlc -o ODromedr espressioni.cmo Lexer.cmo parser.cmo main.cmo
+
+### Come compilare i programmi di stampa
+ocamlc -c outputLexer.ml
+
+ocamlc -o outputLexer espressioni.cmo Lexer.cmo parser.cmo outputLexer.cmo
+
+
+ocamlc -c outputParser.ml
+
+ocamlc -o outputParser espressioni.cmo Lexer.cmo parser.cmo outputParser.cmo
+
+
+ocamlc -c outputParserInfissa.ml
+
+ocamlc -o outputParserInfissa espressioni.cmo Lexer.cmo parser.cmo outputParserInfissa.cmo
 
 
 ## Testing

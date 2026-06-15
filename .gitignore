@@ -2,5 +2,10 @@
 *.ml
 !espressioni.ml
 !main.ml
+!outputLexer.ml
+!outputParser.ml
+!outputParserInfissa.ml
 *.mli
-odromedr
+odromedr*
+ODromedr*
+Odromedr*

@@ -57,8 +57,6 @@ expr:
       { Espressioni.Diff($1, $3) }
   | expr TIMES expr
       { Espressioni.Mult($1, $3) }
-  | MINUS expr %prec UMINUS
-      { Espressioni.Diff(Espressioni.Int 0, $2) }
 ;
 
 listaexpr:  (* Lista di espressioni dentro un vettore [] *)

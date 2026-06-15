@@ -85,7 +85,13 @@ let stampaLista l = List.iter stampaValore l
 let rec stampaespressione = function
   | Int n -> print_string "Int("; print_int n; print_string ")"
   | Var x -> print_string "Var("; print_string x; print_string ")"
-  | Ass (s,e) -> print_string s; print_string " := "; stampaespressione e
+  | Ass (s,e) ->
+     print_string "ASS("; print_string s;
+     print_string ", "; stampaespressione e;
+     print_string ")"
+  | Neg e -> 
+      print_string "NEG("; stampaespressione e;
+      print_string ")"
   | Sum (e1,e2) ->
       print_string "SUM("; stampaespressione e1;
       print_string ", "; stampaespressione e2;
@@ -114,6 +120,7 @@ let rec stampaespressioneinfissa = function
   | Int n -> print_int n
   | Var x -> print_string x
   | Ass (s,e) -> print_string s; print_string " := "; stampaespressioneinfissa e
+  | Neg e -> print_string "-"; stampaespressioneinfissa e
   | Sum (e1,e2) ->
       print_string "(";
       stampaespressioneinfissa e1;
