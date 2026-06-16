@@ -58,11 +58,6 @@ let valuta (Blocco b) = (* valuta un blocco *)
                 failwith "vettori di lunghezza diversa"
               else
                 let prodotti = List.map2 ( * ) x y in
-                VInt (List.fold_left (+) 0 prodotti)        | VVett x, VVett y -> 
-            if List.length x <> List.length y then
-                failwith "vettori di lunghezza diversa"
-              else
-                let prodotti = List.map2 ( * ) x y in
                 VInt (List.fold_left (+) 0 prodotti)
         | _ -> failwith "errore in Mult"
       )
