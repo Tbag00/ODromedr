@@ -7,9 +7,19 @@ let rec elaboraRisposte lexbuf =
   match result with
   | None -> ()
   | Some blocco ->
-      Espressioni.stampaLista (Espressioni.valuta blocco);
-      flush stdout;
+      (try
+        Espressioni.stampaLista (Espressioni.valuta blocco);
+        flush stdout;
+      with
+      | ErroreTipo msg ->
+          Printf.printf "Errore di tipo: %s\n" msg
+      | ErroreLunghezza (n, m) ->
+          Printf.printf "Errore: vettori di lunghezza diversa (%d vs %d)\n" n m
+      | VariabileNonDefinita v ->
+          Printf.printf "Errore: variabile '%s' non definita\n" v
+      );
       elaboraRisposte lexbuf
+;;
 
 let _ =
   let filer = open_in Sys.argv.(1) in

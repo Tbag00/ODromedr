@@ -1,3 +1,7 @@
+exception ErroreTipo of string
+exception ErroreLunghezza of int * int
+exception VariabileNonDefinita of string
+
 (* Risultato della valutazione *)
 type valore =
   | VInt of int
@@ -25,9 +29,11 @@ let valuta (Blocco b) = (* valuta un blocco *)
         VVett (List.map (fun x ->
             match eval env x with (* posso mettere anche espressioni dentro un vettore *)
             | VInt n -> n (* un vettore deve contenere interi non VInt *)
-            | VVett _ -> failwith "elementi del vettore devono essere interi"
+            | VVett _ -> raise (ErroreTipo "elementi del vettore devono essere interi")
           ) lst)
-    | Var v -> List.assoc v env
+    | Var v ->
+      (try List.assoc v env
+       with Not_found -> raise (VariabileNonDefinita v))
     | Neg e -> (match eval env e with
         | VInt n -> VInt (-n)
         | VVett x -> VVett (List.map (fun n -> -n) x))
@@ -35,19 +41,19 @@ let valuta (Blocco b) = (* valuta un blocco *)
         | VInt n, VInt m -> VInt (n + m)
         | VVett x, VVett y ->
             if List.length x <> List.length y then
-              failwith "vettori di lunghezza diversa"
+              raise (ErroreLunghezza(List.length x, List.length y))
             else
               VVett (List.map2 (+) x y) (* map2 prende due liste e applica + *)
-        | _ -> failwith "Errore in Sum"
+        | _ -> raise (ErroreTipo "Sum: operandi incompatibili")
       )
     | Diff(e1,e2) -> (match eval env e1, eval env e2 with
         | VInt n, VInt m -> VInt (n - m)
         | VVett x, VVett y ->
             if List.length x <> List.length y then
-              failwith "vettori di lunghezza diversa"
+              raise (ErroreLunghezza(List.length x, List.length y))
             else
               VVett (List.map2 (-) x y)
-        | _ -> failwith "Errore in Diff"
+        | _ -> raise (ErroreTipo "Diff: operandi incompatibili")
       )
     | Mult(e1,e2) -> (match eval env e1, eval env e2 with
         | VInt n, VInt m -> VInt (n * m)
@@ -55,11 +61,10 @@ let valuta (Blocco b) = (* valuta un blocco *)
         | VVett x, VInt n -> VVett (List.map (fun element -> element * n) x)
         | VVett x, VVett y -> 
             if List.length x <> List.length y then
-                failwith "vettori di lunghezza diversa"
-              else
-                let prodotti = List.map2 ( * ) x y in
-                VInt (List.fold_left (+) 0 prodotti)
-        | _ -> failwith "errore in Mult"
+              raise (ErroreLunghezza(List.length x, List.length y))
+            else
+              let prodotti = List.map2 ( * ) x y in
+              VInt (List.fold_left (+) 0 prodotti)
       )
     | Ass(_,_) -> failwith "Ass non valutabile direttamente con eval"
   in
